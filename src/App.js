@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 
-// function GetStock(stock) {
-//   const [data, setData] = React.useState(null);
+import logo from './logo.svg';
+import "@aws-amplify/ui-react/styles.css";
+import {
+  withAuthenticator,
+  Button,
+  Heading,
+  Image,
+  View,
+  Card,
+} from "@aws-amplify/ui-react";
 
-//   React.useEffect(() => {
-//     fetch("/" + stock)
-//       .then((res) => res.json())
-//       .then((data) => setData(data));
-//   }, []);
-
-//   return data;
-// }
-
-function App() {
+function App({signOut}) {
   // const stock = GetStock("twtr");
 
   const [getData, setGetData] = useState([]);
@@ -21,7 +20,7 @@ function App() {
 
   useEffect(() => {
     //This is a GET request
-    fetch("http://localhost:5000/api/user")
+    fetch("http://localhost:3000/api/user")
       .then((res) => {
         return res.json();
       })
@@ -38,13 +37,13 @@ function App() {
   useEffect(() => {
     //This is a POST request so it requires a "headers", "method", and a "body" that conversts are javscript object into a JSON using the JSON.stringify() method.
     //For every .then() block that modifies your data you must return it so it can then move on to the next .then() block other wise you dont need to use "return"
-    fetch("http://localhost:5000/api/user/create", {
+    fetch("http://localhost:3000/api/user/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        //The Backend is set up in a way were it only responds back with the data you sent it like below
+        //The Backend is set up in a way where it only responds back with the data you sent it like below
         name: "Taj",
         email: "Created@gmail.com",
         password: "password123",
@@ -102,8 +101,16 @@ function App() {
             <Route {...module.routeProps} key={module.name} />
           ))}
       </div> */}
+
+      <View className="App">
+        <Card>
+          <Image src={logo} className="App-logo" alt="logo" />
+          <Heading level={1}> We now have auth!</Heading>
+        </Card>
+        <Button onClick={signOut}>Sign Out</Button>
+      </View>
     </div>
   );
 }
 
-export default App;
+export default withAuthenticator(App);
